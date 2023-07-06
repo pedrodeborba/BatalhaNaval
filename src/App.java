@@ -42,9 +42,6 @@ public class App {
                             System.out.println("\nPronto, seus barcos já foram alocados!\n");
                             System.out.println("Seu tabuleiro:\n");
                             imprimirTabuleiro(tabJogador1);
-                            // Visualizar tabuleiro do oponente?
-                            System.out.printf("Quer visualziar o tabuleiro do Player (2)?\n[  1  ] SIM \n[OUTRO] NÃO \nMinha escolha: ");
-                            viewTab(ler);
                             // Inicia o jogo
                             SinglePlayer(tabJogador1, tabJogador2, ler);
                         break;
@@ -52,9 +49,7 @@ public class App {
                         case 'B':
                             manual(tabJogador1, ler);
                             automatic(tabJogador2);
-                            // Visualizar tabuleiro do oponente?
-                            System.out.printf("Todos seus barcos foram alocados.\nQuer visualziar o tabuleiro do Player (2)?\n[  1  ] SIM \n[OUTRO] NÃO \nMinha escolha: ");
-                            viewTab(ler);
+                            System.out.printf("Todos seus barcos foram alocados.\n");
                             SinglePlayer(tabJogador1, tabJogador2, ler);
                         break;
 
@@ -114,8 +109,7 @@ public class App {
                     imprimirTabuleiro(tabJogador1);
                     System.out.println("Tabuleiro Jogador (2):\n");
                     imprimirTabuleiro(tabJogador2);
-                    System.out.println("Iniciando o jogo!!!\n");
-                    // MultiPlayer(tabJogador1, tabJogador2, ler);
+                    System.out.println("Fim de jogo!");
                 break;
                 case 0:
                     // Encerra o programa
@@ -378,15 +372,17 @@ public class App {
     // Modo Multiplayer
     private static void MultiPlayer(char[][] tabuleiro1, char[][] tabuleiro2, Scanner ler) {
         boolean fimJogo = false;
-        int x;
+        int x = 0;
+        int x2 =0;
         // Contadores para verificar vitória
         int contShot1 = 0;
         int contShot2 = 0;
         // Matriz para registrar os tiros realizados
         boolean[][] tirosRealizados = new boolean[10][10];
+        boolean[][] tirosRealizados2 = new boolean[10][10];
         while (!fimJogo) {
             // Jogador 1 atira
-            System.out.println("\nSua vez de jogar! jogador 1:");
+            System.out.println("\nSua vez de jogar! Player (1):");
             System.out.print("Digite a coordenada x (0 a 9): ");
             if (ler.hasNextInt()) {
                 x = ler.nextInt();
@@ -408,15 +404,15 @@ public class App {
                 if (!tirosRealizados[x][y]) {
                     tirosRealizados[x][y] = true; // Marca a coordenada como verdadeira, assim não atirando no mesmo lugar.
                     if (tabuleiro2[x][y] == ' ') {
-                        System.out.println("Você errou o tiro!");
+                        System.out.println("Jogador(1) errou o tiro!");
                         tabuleiro2[x][y] = '*';
                     } else if (tabuleiro2[x][y] != 'X') {
                         char caracter = tabuleiro2[x][y];
-                        System.out.println("Você acertou um barco " + caracter + "!");
+                        System.out.println("Jogador(1) acertou um barco " + caracter + "!");
                         tabuleiro2[x][y] = 'X';
                         contShot1++;
                         if (contShot1 == 20) {
-                            System.out.println("O jogador 1 venceu!");
+                            System.out.println("O jogador (1) venceu!");
                             fimJogo = true;
                         }
                     } else {
@@ -425,11 +421,11 @@ public class App {
                 } else {
                     System.out.println("Você já atirou nestas coordenadas. Perdeu a vez!");
                 }
-                int x2 = 0;
+            
                 if (!fimJogo) {
                     // Jogador 2 atira
-                    System.out.println("Sua vez de jogar! jogador 2:");
-                    System.out.println("Digite a coordenada de x: ");
+                    System.out.println("\nSua vez de jogar! Player (2):");
+                    System.out.print("Digite a coordenada x (0 a 9): ");
                     if (ler.hasNextInt()) {
                         x2 = ler.nextInt();
                         if (x2 < 0 || x2 > 9) {
@@ -447,18 +443,18 @@ public class App {
                     System.out.print("Digite a coordenada y (A a J): ");
                     int y2 = letraParaNumero();
                     if (y2 != -1) {
-                        if (!tirosRealizados[x2][y2]) {
-                            tirosRealizados[x2][y2] = true; // Marca a coordenada como verdadeira, assim não atirando no mesmo lugar.
-                            if (tabuleiro2[x2][y2] == ' ') {
-                                System.out.println("Você errou o tiro!");
-                                tabuleiro2[x2][y2] = '*';
-                            } else if (tabuleiro2[x2][y2] != 'X') {
-                                char caracter = tabuleiro2[x][y];
-                                System.out.println("Você acertou um barco " + caracter + "!");
-                                tabuleiro2[x2][y2] = 'X';
+                        if (!tirosRealizados2[x2][y2]) {
+                            tirosRealizados2[x2][y2] = true; // Marca a coordenada como verdadeira, assim não atirando no mesmo lugar.
+                            if (tabuleiro1[x2][y2] == ' ') {
+                                System.out.println("Jogador(2) errou o tiro!");
+                                tabuleiro1[x2][y2] = '*';
+                            } else if (tabuleiro1[x2][y2] != 'X') {
+                                char caracter = tabuleiro1[x][y];
+                                System.out.println("Jogador(2) acertou um barco " + caracter + "!");
+                                tabuleiro1[x2][y2] = 'X';
                                 contShot2++;
                                 if (contShot2 == 20) {
-                                    System.out.println("O jogador 1 venceu!");
+                                    System.out.println("O jogador 2 venceu!");
                                     fimJogo = true;
                                 }
                             } else {
@@ -468,9 +464,9 @@ public class App {
                             System.out.println("Você já atirou nestas coordenadas. Perdeu a vez!");
                         }
                         // Imprime os tabuleiros
-                        System.out.println("\nSeu tabuleiro:");
+                        System.out.println("\nTabuleiro player (1):");
                         imprimirTabuleiro(tabuleiro1);
-                        System.out.println("\nTabuleiro do Adversário:");
+                        System.out.println("\nTabuleiro player (2):");
                         imprimirTabuleiro(tabuleiro2);
                     }
                 } else {
@@ -490,21 +486,6 @@ public class App {
                 System.out.printf("[ %c ]", tabuleiro[i][j]);
             }
             System.out.println("\n");
-        }
-    }
-
-    private static void viewTab(Scanner ler) {
-        if (ler.hasNextInt()) {
-            if (ler.nextInt() == 1) {
-                // Exibe tabuleiro jogador 2
-                System.out.println("Tabuleiro do jogador 2:\n");
-                imprimirTabuleiro(tabJogador2);
-            } else {
-                System.out.println("Você optou por não roubar, muito bem!");
-            }
-        } else {
-            System.out.println("Você optou por não roubar, muito bem!");
-            ler.next();
         }
     }
 }
